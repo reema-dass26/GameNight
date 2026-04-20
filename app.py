@@ -7,7 +7,7 @@ import random
 st.set_page_config(page_title="Thursday Game Night 💜", layout="centered")
 
 # -----------------------
-# CUSTOM STYLE
+# CUSTOM STYLE + FLOWERS 🌸
 # -----------------------
 st.markdown("""
     <style>
@@ -25,8 +25,42 @@ st.markdown("""
             width: 100%;
             font-size: 16px;
         }
+
+        /* 🌸 Flower rain */
+        .flower {
+            position: fixed;
+            top: -10px;
+            font-size: 20px;
+            animation: fall linear infinite;
+            z-index: 999;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh);
+            }
+        }
     </style>
 """, unsafe_allow_html=True)
+
+# -----------------------
+# FLOWER FUNCTION 🌸
+# -----------------------
+def flower_rain():
+    flowers = ""
+    for i in range(15):
+        left = random.randint(0, 100)
+        duration = random.uniform(5, 10)
+        delay = random.uniform(0, 5)
+        flowers += f"""
+        <div class="flower" style="
+            left:{left}%;
+            animation-duration:{duration}s;
+            animation-delay:{delay}s;">
+            🌸
+        </div>
+        """
+    st.markdown(flowers, unsafe_allow_html=True)
 
 # -----------------------
 # TITLE
@@ -67,6 +101,8 @@ for game in games:
     with col2:
         if st.button("Vote 👍", key=game):
             st.session_state.votes[game] += 1
+            st.toast(f"{game} got a vote 💜")
+            flower_rain()
 
 # -----------------------
 # SHOW VOTES
@@ -82,6 +118,8 @@ st.subheader("🎲 Chaos Button")
 if st.button("Surprise Us 🎲"):
     winner = random.choice(games)
     st.success(f"Tonight, you’re playing: **{winner}** 💥")
+    st.balloons()
+    flower_rain()
 
 # -----------------------
 # TOP PICK
@@ -95,6 +133,22 @@ if st.button("Go With The Mood 🏆"):
     else:
         winner = random.choice(top_games)
         st.success(f"Consensus says: **{winner}** 🏆")
+        st.balloons()
+
+# -----------------------
+# EXTRA FUN BUTTONS 🌈
+# -----------------------
+col1, col2 = st.columns(2)
+
+with col1:
+    if st.button("💘 Date Night Mode"):
+        winner = random.choice(["🧩 It Takes Two", "🎨 Pictionary", "👑 Ludo"])
+        st.success(f"Date night pick: **{winner}** 💞")
+        st.snow()
+
+with col2:
+    if st.button("🌧 Chill Rain"):
+        st.snow()
 
 # -----------------------
 # RESET
